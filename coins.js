@@ -1,30 +1,26 @@
 ( function( $ ) {
 
-$( document ).ready( function () { //jquery
-	$( 'span.Z3988' ).each( function ( i, member ) {
-		var attributes_str = ($(member).attr('title'));
-		// var attributes = attributes_str.split("&")
-		// var attributes_kv = {};
-		// for (var i = 0; i < attributes.length; i++) {
-			// var aTemp = attributes[i].split("=");
-			// if (aTemp[1].length > 0) {
-				// attributes_kv[aTemp[0]] = unescape(aTemp[1]);
-			// }
-		// }
-		// console.log(attributes_kv);
-		var rft_attribs = attributes_str.replace("ctx_ver=Z39.88-2004&", "");
-		console.log(rft_attribs);
-		var oclc_url = "https://worldcat.org/webservices/kb/openurl/resolve?fallback=openaccess,resolver&wskey=7S8RWS0d5ySU0qpZYE78OXGOhi34dR7RFV3y8KbiGB7vSC6LKhwZkGYIqDDlpJls2IHuY3EXI5sZt1UM&req.ip=132.174.88.129&" + rft_attribs;
+  $( document ).ready( function () { //jquery
+      $( 'span.Z3988' ).each( function ( i, member ) {
+          var attributes_str = ($(member).attr('title'));
+          var rft_attribs = attributes_str.replace("ctx_ver=Z39.88-2004&", "");
+          rft_attribs = '&req.ip=132.174.88.129&' + rft_attribs;
+          var oclc_url = "http://tools.wmflabs.org/local-reference-api/index.php";
+//          var oclc_url = "http://localhost/index.php";
 
-		$.ajax({
-			url: oclc_url,
-			complete: function( data ) {
-				console.log(data);
-			}
-		});
-
-	} );
-} );
+          $.ajax({
+              url: oclc_url,
+                headers: { 'params' : rft_attribs },
+                success: function( data ) {
+                data = $.parseJSON(data);
+                if (data[0]['url'] == undefined)
+                  $(member).append("<div> <a href=" + data[0]['linkerurl'] + ">LINK</a> </div>")
+                else
+                  $(member).append("<div> <a href=" + data[0]['url'] + ">LINK</a> </div>")
+              }
+            });
+        } );
+    } );
 
 
 } )( $ );
