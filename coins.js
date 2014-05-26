@@ -19,9 +19,9 @@ var ip;
                 success: function( data ) {
                 data = $.parseJSON(data);
                 if (data[0]['url'] == undefined)
-                  $(member).append("<a href=" + data[0]['linkerurl'] + ">LINK</a>")
+                  $(member).prepend("<a href=" + data[0]['linkerurl'] + ">LINK</a>")
                 else
-                  $(member).append("<a href=" + data[0]['url'] + ">LINK</a>")
+                  $(member).prepend("<a href=" + data[0]['url'] + ">LINK</a>")
               }
             });
         } );
